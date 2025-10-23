@@ -1,23 +1,24 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" class="h-full">
 <head>
   <meta charset="UTF-8">
   <title>슈우의 소개 페이지</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+  <link rel="stylesheet" href="./dist/output.css" />
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans leading-relaxed">
+<body class="flex min-h-dvh flex-col bg-gray-50 text-gray-800 font-sans leading-relaxed overflow-x-hidden">
   <!-- 헤더 -->
   <header class="bg-slate-800 text-white text-center py-6 shadow-md">
     <h1 class="text-3xl font-bold mb-2">🌙 슈의 웹 개발 여정</h1>
     <nav class="space-x-4">
-      <a href="#" class="hover:text-blue-400">Home</a>
-      <a href="#" class="hover:text-blue-400">Portfolio</a>
+      <a href="./index.html" class="hover:text-blue-400">Home</a>
+      <a href="./projects.html" class="text-blue-400 font-semibold">Projects</a>
       <a href="#" class="hover:text-blue-400">Contact</a>
     </nav>
   </header>
 
   <!-- 메인 -->
-  <main class="max-w-3xl mx-auto px-6 py-10">
+  <main class="flex-1 max-w-3xl mx-auto px-6 py-10">
     <section class="mb-12">
       <h2 class="text-2xl font-semibold text-blue-600 mb-4">👩‍💻 자기소개</h2>
       <p class="mb-3">안녕하세요! 프론트엔드 개발자를 꿈꾸는 <span class="font-semibold">슈</span>입니다.</p>
@@ -36,7 +37,7 @@
   </main>
 
   <!-- 푸터 -->
-  <footer class="bg-slate-200 text-center py-4 text-sm text-slate-700 mt-16">
+  <footer class="bg-slate-200 text-center py-4 text-sm text-slate-700">
     © 2025 Sujeong (Shuu) — All rights reserved.
   </footer>
 </body>

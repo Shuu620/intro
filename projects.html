@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>슈의 프로젝트</title>
+  <!-- CDN 테스트 -->
+  <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+  <!-- 로컬 빌드된 CSS 연결 -->
+  <link rel="stylesheet" href="./dist/output.css" />
+</head>
+<body class="flex flex-col min-h-screen bg-gray-50 text-gray-800 font-sans leading-relaxed">
+  <header class="bg-slate-800 text-white text-center py-6 shadow-md">
+    <h1 class="text-3xl font-bold mb-2">🌙 슈의 프로젝트</h1>
+    <nav class="space-x-4">
+      <a href="./index.html" class="hover:text-blue-400">Home</a>
+      <a href="./projects.html" class="text-blue-400 font-semibold">Projects</a>
+      <a href="#" class="hover:text-blue-400">Contact</a>
+    </nav>
+  </header>
+
+  <main class="flex-grow max-w-6xl mx-auto px-6 py-12">
+    <h2 class="text-2xl font-semibold text-blue-600 mb-6">💻 진행 중인 프로젝트</h2>
+
+    <!-- 카드 영역 -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      
+      <!-- 카드 1 -->
+      <div class="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+        <img src="img/bunny1.jpg" alt="프로젝트 1" class="w-full h-48 object-cover">
+        <div class="p-5">
+          <h3 class="text-xl font-bold mb-2">Todo List</h3>
+          <p class="text-gray-600 mb-3">🌿 Spring + React 기반 Todo List 프로젝트</p>
+          <a href="#" class="inline-block text-blue-600 hover:underline">자세히 보기 →</a>
+        </div>
+      </div>
+
+      <!-- 카드 2 -->
+      <div class="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+        <img src="img/bunny2.jpeg" alt="프로젝트 2" class="w-full h-48 object-cover">
+        <div class="p-5">
+          <h3 class="text-xl font-bold mb-2">Tarot Card Picker</h3>
+          <p class="text-gray-600 mb-3">🔮 버튼을 눌러 오늘의 카드를 뽑아보세요!</p>
+          <a href="#" class="inline-block text-blue-600 hover:underline">자세히 보기 →</a>
+        </div>
+      </div>
+
+      <!-- 카드 3 -->
+      <div class="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+        <img src="img/bunny3.jpg" alt="프로젝트 3" class="w-full h-48 object-cover">
+        <div class="p-5">
+          <h3 class="text-xl font-bold mb-2">Nintendo Switch 이벤트 클론</h3>
+          <p class="text-gray-600 mb-3">🎮 Tailwind를 활용한 반응형 Nintendo 프로모션 페이지</p>
+          <a href="#" class="inline-block text-blue-600 hover:underline">자세히 보기 →</a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="bg-slate-200 text-center py-4 text-sm text-slate-700">
+    © 2025 Sujeong (Shuu) — All rights reserved.
+  </footer>
+</body>
+</html>
