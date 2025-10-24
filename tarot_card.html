@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>오늘의 타로 카드 🔮</title>
+  <!-- CDN 테스트 -->
+  <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+  <link rel="stylesheet" href="./dist/output.css" />
+  <style>
+    /* Tailwind에 없는 3D 관련 CSS만 살짝 추가 */
+    .perspective { perspective: 1000px; -webkit-perspective: 1000px; }
+    .preserve-3d { transform-style: preserve-3d; -webkit-transform-style: preserve-3d; }
+    .backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+</style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-indigo-100 to-purple-200 flex flex-col items-center justify-center text-gray-800">
+
+  <!-- 카드 영역 -->
+<div class="relative w-64 h-96 perspective mb-4">
+  <div id="tarot-card" class="relative w-full h-full transition-transform duration-700 preserve-3d cursor-pointer">
+    <!-- 앞면 -->
+    <div class="absolute inset-0 bg-white rounded-2xl shadow-xl flex items-center justify-center backface-hidden">
+      <img id="tarot-img" src="img/tarot/tarot-cards-back.png" alt="타로카드" class="rounded-xl shadow-md w-[90%] h-auto">
+    </div>
+  </div>
+</div>
+
+<!-- 카드 밖(아래)에 결과 박스 배치 -->
+<div id="tarot-result"
+     class="w-64 rounded-2xl bg-white/90 shadow p-4 opacity-0 transition-opacity duration-700 overflow-y-auto max-h-48">
+  <h2 id="tarot-name" class="text-lg font-bold text-indigo-700 mb-1"></h2>
+  <p id="tarot-meaning" class="text-gray-700 text-sm mb-2"></p>
+  <p id="tarot-summary" class="text-indigo-600 text-sm whitespace-pre-line leading-relaxed"></p>
+</div>
+
+  <!-- 버튼 -->
+  <button id="tarot-btn" class="px-6 py-3 bg-indigo-600 text-white rounded-xl shadow hover:bg-indigo-700 active:scale-95 transition">
+    오늘의 카드 뽑기
+  </button>
+  <!-- 리셋 버튼 -->
+    <button id="reset-btn" class="mt-3 px-5 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition">
+        처음으로 돌아가기
+    </button>
+
+  <p id="tarot-msg" class="mt-6 text-sm text-gray-700"></p>
+
+  <script>
+    const TAROT = [
+        { key: "Tarot_00_Fool", name: "0. The Fool (광대)", meaning: "새로운 시작, 모험, 자유",
+            summary: "가볍게 한 걸음을 내딛어 보세요. 우연한 행운이 따라오지만, 기본 안전장치는 챙기기! 🍀" },
+        { key: "Tarot_01_Magician", name: "I. The Magician (마법사)", meaning: "의지, 실행력, 자원 활용",
+            summary: "필요한 자원은 이미 당신 손에 있어요. 말보다 실행! 오늘은 ‘시작’이 최고의 주문 ✨" },
+        { key: "Tarot_02_High_Priestess", name: "II. The High Priestess (여사제)", meaning: "직감, 내면의 지혜, 비밀",
+            summary: "시끄러운 조언보다 당신의 직감이 정확합니다. 잠시 멈추고 마음의 소리를 들어보세요 🌙" },
+        { key: "Tarot_03_Empress", name: "III. The Empress (여제)", meaning: "풍요, 창조성, 돌봄",
+            summary: "아이디어가 무르익는 날. 돌봄과 배려가 복을 부릅니다. 자신에게도 부드럽게 💐" },
+        { key: "Tarot_04_Emperor", name: "IV. The Emperor (황제)", meaning: "질서, 리더십, 안정",
+            summary: "원칙과 기준을 세우면 일이 정돈돼요. 리더십을 보여줄 타이밍! 흔들리지 말기 💪" },
+        { key: "Tarot_05_Hierophant", name: "V. The Hierophant (교황)", meaning: "전통, 멘토, 학습",
+            summary: "검증된 방법이 답일 때. 멘토에게 조언을 구하거나 기본기를 다져보세요 📘" },
+        { key: "Tarot_06_Lovers", name: "VI. The Lovers (연인)", meaning: "선택, 조화, 관계",
+            summary: "가치에 맞는 선택이 장기적으로 득이 됩니다. 솔직한 대화가 관계를 한 단계 업 ❤️" },
+        { key: "Tarot_07_Chariot", name: "VII. The Chariot (전차)", meaning: "의지, 전진, 승리",
+            summary: "주저 말고 밀어붙이기! 집중과 추진력이 승부를 가릅니다. 흔들려도 핸들을 꽉 잡자 🏁" },
+        { key: "Tarot_08_Strength", name: "VIII. Strength (힘)", meaning: "용기, 인내, 자제",
+            summary: "힘은 부드러움에서 나옵니다. 강요보다 설득, 조급함보다 인내가 승리의 열쇠 🦁" },
+        { key: "Tarot_09_Hermit", name: "IX. The Hermit (은둔자)", meaning: "성찰, 탐구, 고요",
+            summary: "혼자만의 시간이 필요해요. 한 걸음 물러서면 해답이 또렷해집니다 🔦" },
+        { key: "Tarot_10_Wheel_of_Fortune", name: "X. Wheel of Fortune (운명의 수레바퀴)", meaning: "변화, 순환, 전환점",
+            summary: "흐름이 바뀌는 날. 좋은 파도는 탈 준비가 된 자에게 옵니다. 타이밍 포착! 🎡" },
+        { key: "Tarot_11_Justice", name: "XI. Justice (정의)", meaning: "균형, 공정, 책임",
+            summary: "사실과 원칙에 근거해 결정하세요. 서류·약속·계약에 특히 신중하기 ⚖️" },
+        { key: "Tarot_12_Hanged_Man", name: "XII. The Hanged Man (매달린 남자)", meaning: "관점 전환, 내려놓음",
+            summary: "멈춤은 실패가 아니에요. 시각을 바꾸면 답이 보여요. 집착을 하나 내려놓기 🪷" },
+        { key: "Tarot_13_Death", name: "XIII. Death (죽음)", meaning: "종결과 시작, 변화",
+            summary: "끝내야 시작됩니다. 과감한 정리가 새 판을 엽니다. 미련보다 갱신을 택하기 🌑➡️🌅" },
+        { key: "Tarot_14_Temperance", name: "XIV. Temperance (절제)", meaning: "조화, 균형, 치유",
+            summary: "너무 빠르면 넘치고, 너무 늦으면 식어요. 적당한 속도와 조합을 찾기 🍵" },
+        { key: "Tarot_15_Devil", name: "XV. The Devil (악마)", meaning: "집착, 유혹, 속박",
+            summary: "단기 쾌락의 함정 주의. ‘해야 해서’가 아니라 ‘원해서’ 하는지 점검해요 ⛓️" },
+        { key: "Tarot_16_Tower", name: "XVI. The Tower (탑)", meaning: "급변, 붕괴, 재구성",
+            summary: "예상 밖 변수가 구조를 흔듭니다. 무너진 자리에서 꼭 필요한 것만 다시 쌓기 ⚡" },
+        { key: "Tarot_17_Star", name: "XVII. The Star (별)", meaning: "희망, 회복, 영감",
+            summary: "회복의 바람이 붑니다. 작은 희망을 꾸준히 키워보세요. 영감이 샘솟는 날 ✨" },
+        { key: "Tarot_18_Moon", name: "XVIII. The Moon (달)", meaning: "불확실, 상상, 잠재의식",
+            summary: "불안은 정보의 부재에서 와요. 확인되지 않은 추측보다 팩트 체크 먼저 🌫️" },
+        { key: "Tarot_19_Sun", name: "XIX. The Sun (태양)", meaning: "성공, 기쁨, 활력",
+            summary: "당당히 빛날 차례! 협업도 술술 풀립니다. 밝은 태도로 밀고 나가기 ☀️" },
+        { key: "Tarot_20_Judgement", name: "XX. Judgement (심판)", meaning: "각성, 부름, 평가",
+            summary: "과거 경험이 재평가됩니다. 호출받은 자리에서 당신의 목소리를 내세요 📣" },
+        { key: "Tarot_21_World", name: "XXI. The World (세계)", meaning: "완성, 성취, 통합",
+            summary: "한 사이클이 완성됐습니다. 마무리를 축하하고, 다음 레벨을 설계할 때 🌍" }
+    ];
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const $card    = document.getElementById("tarot-card");
+        const $img     = document.getElementById("tarot-img");
+        const $result  = document.getElementById("tarot-result");
+        const $name    = document.getElementById("tarot-name");
+        const $meaning = document.getElementById("tarot-meaning");
+        const $summary = document.getElementById("tarot-summary"); // 없으면 null이어도 동작
+        const $btn     = document.getElementById("tarot-btn");
+        const $msg     = document.getElementById("tarot-msg");
+
+        // 모드 전환: true = 하루 1회, false = 테스트 무제한
+        const DAILY_MODE = true;
+
+        const today = new Date().toDateString();
+        const savedRaw = localStorage.getItem("tarot");
+        const saved = savedRaw ? JSON.parse(savedRaw) : null;
+
+        let angle = 0;
+
+        // 페이지 진입 시: 하루 1회 모드면 이미 뽑았는지 확인
+        if (DAILY_MODE && saved && saved.date === today) {
+            showCard(saved, /*spin*/ false);
+            if ($msg) $msg.textContent = "오늘은 이미 카드를 뽑았어요 🌙";
+            disableButton();
+        }
+
+        $btn.addEventListener("click", async () => {
+            if (DAILY_MODE) {
+            const s = localStorage.getItem("tarot");
+            const j = s ? JSON.parse(s) : null;
+            if (j && j.date === today) {
+                alert("오늘은 이미 카드를 뽑았어요 🌙");
+                return;
+            }
+            }
+
+            // 랜덤 카드 뽑기
+            const card = TAROT[Math.floor(Math.random() * TAROT.length)];
+
+            // 이미지가 실제로 로드될 때까지 기다렸다가 UI 업데이트
+            await loadImage($img, `img/tarot/${card.key}.jpg`, {
+                // jpg가 없으면 png로 폴백
+                fallback: `img/tarot/${card.key}.png`,
+                // 둘 다 실패하면 뒷면 유지
+            });
+
+            showCard(card, /*spin*/ true);
+
+            if (DAILY_MODE) {
+            localStorage.setItem("tarot", JSON.stringify({
+                key: card.key,
+                name: card.name,
+                meaning: card.meaning,
+                summary: card.summary || "",
+                date: today
+            }));
+            disableButton();
+            }
+        });
+
+        function showCard(card, spin = true) {
+            // 텍스트 채우기
+            $name.textContent = card.name;
+            $meaning.textContent = card.meaning;
+            if ($summary) {
+            $summary.textContent = `✨ 오늘의 운세 총정리 ✨\n${card.summary || ""}`;
+            }
+
+            // 결과 박스 보이기 (Tailwind 숨김 해제)
+            $result.classList.remove("opacity-0");
+            $result.classList.add("opacity-100");
+
+            // 카드 360도 회전(이미지 거꾸로 방지)
+            if (spin) {
+            angle += 360;
+            $card.style.transition = "transform 1s cubic-bezier(0.25,1,0.5,1)";
+            $card.style.transform = `rotateY(${angle}deg)`;
+            }
+        }
+
+        function disableButton() {
+            $btn.disabled = true;
+            $btn.classList.add("bg-gray-400", "cursor-not-allowed");
+            $btn.classList.remove("bg-indigo-600", "hover:bg-indigo-700");
+        }
+
+        // 다시 뽑기 버튼 기능
+        const $reset = document.getElementById("reset-btn");
+        if ($reset) {
+        $reset.addEventListener("click", () => {
+            localStorage.removeItem("tarot");
+            alert("✨ 처음 상태로 돌아갑니다! 🌙\n이제 오늘의 카드를 새로 뽑을 수 있어요.");
+            location.reload(); // 새로고침으로 버튼 다시 활성화
+        });
+        }
+
+        // 이미지 로더 (jpg 실패 시 png 폴백)
+        function loadImage(imgEl, src, { fallback } = {}) {
+            return new Promise((resolve) => {
+            const tryLoad = (url, next) => {
+                const test = new Image();
+                test.onload = () => { imgEl.src = url; resolve(true); };
+                test.onerror = () => {
+                if (next) next();
+                else resolve(false);
+                };
+                test.src = url + (url.includes("?") ? "&" : "?") + "_ts=" + Date.now(); // 캐시무효화
+            };
+
+            if (fallback) {
+                tryLoad(src, () => tryLoad(fallback));
+            } else {
+                tryLoad(src);
+            }
+            });
+        }
+        });
+
+
+  </script>
+</body>
+</html>
