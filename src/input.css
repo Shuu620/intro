@@ -1,0 +1,17 @@
+@import "tailwindcss";
+@source "./**/*.{html,js}";
+
+/* 3D 유틸 */
+@layer utilities {
+  .perspective { perspective: 1000px; }
+  .preserve-3d { transform-style: preserve-3d; -webkit-transform-style: preserve-3d; }
+  .backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+}
+
+/* 안정화 */
+#tarot-card {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: transform;
+}
