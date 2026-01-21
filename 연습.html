@@ -1,14 +1,93 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" class="h-full">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>연습페이지</title>
-  <link rel="stylesheet" href="./dist/output.css">
+  <title>슈우의 소개 페이지</title>
+  <link rel="stylesheet" href="./dist/output.css" />
 </head>
-<body class="flex-col">
-  <div class="bg-red-600 w-1 h-32"></div>
-  <div class="bg-amber-300 w-32 h-8"></div>
-  <div class="bg-green-400 w-full h-16"></div>
+
+<body class="flex min-h-dvh flex-col bg-gray-50 text-gray-800 font-sans leading-relaxed overflow-x-hidden">
+
+  <!-- header: 페이지 상단 영역 -->
+  <header class="bg-slate-800 text-white text-center py-6 shadow-md">
+    <h1 class="text-3xl font-bold mb-2">🌙 슈의 웹 개발 여정</h1>
+
+    <!-- nav: 주요 이동 메뉴 -->
+    <nav aria-label="메인 메뉴" class="space-x-4">
+      <a href="./index.html" class="hover:text-blue-400">Home</a>
+      <a href="./projects.html" class="text-blue-400 font-semibold">Projects</a>
+    </nav>
+  </header>
+
+  <!-- main: 이 페이지의 핵심 콘텐츠 -->
+  <main class="flex-1 max-w-3xl mx-auto px-6 py-10 space-y-12">
+
+    <!-- section: 자기소개 -->
+    <section id="about">
+      <h2 class="text-2xl font-semibold text-blue-600 mb-4">👩‍💻 자기소개</h2>
+
+      <!-- article: 독립적인 소개 글 -->
+      <article class="space-y-3 mb-6">
+        <p>
+          안녕하세요! 프론트엔드 개발자를 꿈꾸는
+          <strong class="font-semibold">슈</strong>입니다.
+        </p>
+        <p>
+          React와 Spring을 연결하는
+          <em class="not-italic font-medium text-slate-700">
+            풀스택 개발자
+          </em>
+          가 되는 것이 목표예요 💻
+        </p>
+      </article>
+
+      <!-- figure: 이미지 + 설명 -->
+      <figure class="text-center">
+        <img
+          src="./img/profile.jpeg"
+          alt="슈의 프로필 이미지"
+          class="w-48 mx-auto rounded-xl shadow-md border"
+        >
+        <figcaption class="mt-2 text-sm text-gray-500">
+          프로필 이미지
+        </figcaption>
+      </figure>
+    </section>
+
+    <!-- section: 학습 목표 -->
+    <section>
+      <h2 class="text-2xl font-semibold text-blue-600 mb-4">
+        🎯 앞으로 배우고 싶은 것
+      </h2>
+
+      <ul class="list-disc list-inside space-y-2 bg-white shadow-md rounded-2xl p-6 border border-gray-100">
+        <li>React + Next.js</li>
+        <li>TailwindCSS</li>
+        <li>Spring Boot REST API 연동</li>
+      </ul>
+    </section>
+
+    <!-- section: 연락 -->
+    <section id="contact">
+      <h2 class="text-2xl font-semibold text-blue-600 mb-4">📮 Contact</h2>
+      <p>
+        이메일:
+        <a
+          href="mailto:tnsin333@gmail.com"
+          class="text-blue-600 font-medium hover:underline"
+        >
+          tnsin333@gmail.com
+        </a>
+      </p>
+    </section>
+
+  </main>
+
+  <!-- footer: 페이지 하단 정보 -->
+  <footer class="bg-slate-200 text-center py-4 text-sm text-slate-700">
+    © 2025 Sujeong (Shuu) — All rights reserved.
+  </footer>
+
 </body>
 </html>
